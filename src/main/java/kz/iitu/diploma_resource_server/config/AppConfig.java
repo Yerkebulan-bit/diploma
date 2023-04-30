@@ -16,9 +16,9 @@ public class AppConfig {
         DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
 
         dataSourceBuilder.driverClassName("org.postgresql.Driver")
-                .url("jdbc:postgresql://localhost:5432/postgres?currentSchema=diploma")
-                .username("postgres")
-                .password("5246264425");
+                .url("jdbc:postgresql://ec2-3-217-146-37.compute-1.amazonaws.com:5432/d68cimlnrvdpjo?currentSchema=diploma")
+                .username("ywvjmltmyyddhf")
+                .password("6c2fe5ef9f20fb3c22c6a3d4ba0ea461f8adacd52d08073aeb3cf5493050bb09");
 
         return dataSourceBuilder.build();
     }
