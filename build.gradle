@@ -54,14 +54,18 @@ dependencies {
     duplicatesStrategy = 'include'
 }*/
 
+/*
 jar {
     enabled = true
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } } {
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    }
     manifest(({
         attributes 'Main-Class': 'kz.iitu.diploma_resource_server.DiplomaResourceServerApplication'
     } as groovy.lang.Closure<?>))
     duplicatesStrategy = 'include'
 }
+*/
 
 tasks.named('test') {
     useJUnitPlatform()
