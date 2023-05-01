@@ -48,9 +48,9 @@ bootJar {
     archiveFileName = "diploma.jar"
     // include all dependencies in the jar
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    manifest {
+    manifest(({
         attributes 'Main-Class': 'kz.iitu.diploma_resource_server.DiplomaResourceServerApplication'
-    }
+    } as groovy.lang.Closure<?>))
     duplicatesStrategy = 'include'
 }
 
