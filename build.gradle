@@ -43,7 +43,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
-bootJar {
+/*bootJar {
     enabled = true
     archiveFileName = "diploma.jar"
     // include all dependencies in the jar
@@ -52,10 +52,15 @@ bootJar {
         attributes 'Main-Class': 'kz.iitu.diploma_resource_server.DiplomaResourceServerApplication'
     } as groovy.lang.Closure<?>))
     duplicatesStrategy = 'include'
-}
+}*/
 
 jar {
-    enabled = false
+    enabled = true
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest(({
+        attributes 'Main-Class': 'kz.iitu.diploma_resource_server.DiplomaResourceServerApplication'
+    } as groovy.lang.Closure<?>))
+    duplicatesStrategy = 'include'
 }
 
 tasks.named('test') {
