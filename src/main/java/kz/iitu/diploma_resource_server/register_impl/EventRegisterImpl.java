@@ -84,7 +84,7 @@ public class EventRegisterImpl implements EventRegister {
 
         return SqlSelectTo.theClass(Event.class)
                 .sql(sql)
-                .applyTo(source.getConnection());
+                .applyTo(source);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class EventRegisterImpl implements EventRegister {
         var eventDetail = SqlSelectTo.theClass(EventDetail.class)
                 .sql(EventTable.BASE_SELECT_DETAILS_BY_ID)
                 .param(eventId)
-                .applyTo(source.getConnection())
+                .applyTo(source)
                 .stream().findFirst().orElseThrow();
 
         if (StringUtils.isNotNullOrEmpty(eventDetail.organizationId)) {
