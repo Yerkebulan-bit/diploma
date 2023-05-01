@@ -1,0 +1,2 @@
+Manifest-Version: 1.0
+Main-Class: kz.iitu.diploma_resource_server.DiplomaResourceServerApplication

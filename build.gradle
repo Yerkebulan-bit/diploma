@@ -43,6 +43,10 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
+tasks.named("bootJar") {
+    mainClass = 'kz.iitu.diploma_resource_server.DiplomaResourceServerApplication'
+}
+
 /*bootJar {
     enabled = true
     archiveFileName = "diploma.jar"
