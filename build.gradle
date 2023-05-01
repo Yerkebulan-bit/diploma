@@ -43,12 +43,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'kz.iitu.diploma_resource_server.DiplomaResourceServerApplication'
-    }
-}
-
 bootJar {
     enabled = true
     archiveFileName = "diploma.jar"
