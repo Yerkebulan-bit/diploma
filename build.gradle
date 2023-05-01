@@ -43,9 +43,15 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
+jar {
+    enabled false
+}
+
 tasks.named("bootJar") {
     mainClass = 'kz.iitu.diploma_resource_server.DiplomaResourceServerApplication'
 }
+
+
 
 /*bootJar {
     enabled = true
