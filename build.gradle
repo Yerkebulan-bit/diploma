@@ -54,6 +54,10 @@ bootJar {
     duplicatesStrategy = 'include'
 }
 
+jar {
+    enabled = false
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
