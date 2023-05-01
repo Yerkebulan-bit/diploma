@@ -4,16 +4,6 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'kz.iitu.diploma_resource_server.DiplomaResourceServerApplication'
-    }
-
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
-
 group = 'kz.iitu'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -53,13 +43,15 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
-jar {
+bootJar {
+    enabled = true
+    archiveFileName = "diploma.jar"
+    // include all dependencies in the jar
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest {
-        attributes (
-                'Main-Class': 'kz.iitu.diploma_resource_server.DiplomaResourceServerApplication',
-                'Class-Path': configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-        )
+        attributes 'Main-Class': 'kz.iitu.diploma_resource_server.DiplomaResourceServerApplication'
     }
+    duplicatesStrategy = 'include'
 }
 
 tasks.named('test') {
