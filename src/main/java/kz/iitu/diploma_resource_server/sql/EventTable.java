@@ -21,6 +21,7 @@ public class EventTable {
     public static final String IMAGE_ID = "image_id";
 
     public static final String BASE_SELECT = "SELECT " +
+            ID + " as id, " +
             NAME + " as name, " +
             TYPE + " as type, " +
             SHORT_DESC + " as shortDescription, " +
