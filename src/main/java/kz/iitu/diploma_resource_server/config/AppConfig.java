@@ -4,11 +4,15 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan("kz.iitu.diploma_resource_server")
+@EnableAuthorizationServer
+@EnableResourceServer
 public class AppConfig {
 
     @Bean
