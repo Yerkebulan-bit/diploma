@@ -109,7 +109,6 @@ public class UserRegisterImpl implements UserRegister {
 
         var userId = StringUtils.isNullOrEmpty(user.id) ? UUID.randomUUID().toString() : user.id;
 
-
         try (var connection = source.getConnection()) {
             SqlUpsert.into(UserTable.TABLE_NAME)
                     .key(UserTable.ID, userId)
@@ -120,10 +119,11 @@ public class UserRegisterImpl implements UserRegister {
                     .field(UserTable.ABOUT, user.about)
                     .field(UserTable.PHONE, user.phone)
                     .field(UserTable.IMAGE_ID, user.imageId)
+                    .field(UserTable.USERNAME, user.username)
                     .toUpdate()
                     .ifPresent(u -> u.applyTo(connection));
 
-            SqlUpsert.into("user")
+            SqlUpsert.into("users")
                     .key("username", user.username)
                     .field("password", passwordEncoder.encode(user.rawPassword))
                     .field("enabled", true)
@@ -158,7 +158,7 @@ public class UserRegisterImpl implements UserRegister {
 
             ps.setBoolean(1, value);
             ps.setString(2, userId);
-            ps.setString(2, eventId);
+            ps.setString(3, eventId);
 
             ps.executeUpdate();
         }

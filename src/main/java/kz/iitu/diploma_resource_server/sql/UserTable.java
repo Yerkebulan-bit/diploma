@@ -2,7 +2,7 @@ package kz.iitu.diploma_resource_server.sql;
 
 public class UserTable {
 
-    public static final String TABLE_NAME = "user";
+    public static final String TABLE_NAME = "user_info";
     public static final String ID = "id";
     public static final String NAME = "first_name";
     public static final String SURNAME = "last_name";
@@ -11,6 +11,7 @@ public class UserTable {
     public static final String ABOUT = "about";
     public static final String PHONE = "phone_numbers";
     public static final String IMAGE_ID = "image_id";
+    public static final String USERNAME = "username";
 
     public static final String SELECT_USERS_BY_EVENT = "SELECT u." +
             ID + " as id, " +
