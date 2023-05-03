@@ -26,6 +26,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .mvcMatchers("/event/**").permitAll()
+                .mvcMatchers("/file/**").permitAll()
                 .mvcMatchers("/user/register").permitAll()
                 .mvcMatchers("/organization/save-org").permitAll()
                 .mvcMatchers("/organization/save-org").permitAll()
