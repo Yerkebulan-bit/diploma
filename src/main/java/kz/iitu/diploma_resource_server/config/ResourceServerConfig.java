@@ -29,7 +29,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .mvcMatchers("/file/**").permitAll()
                 .mvcMatchers("/user/register").permitAll()
                 .mvcMatchers("/organization/save-org").permitAll()
-                .mvcMatchers("/organization/save-org").permitAll()
+                .mvcMatchers("/comment/load-event-comments").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .cors(AbstractHttpConfigurer::disable)
