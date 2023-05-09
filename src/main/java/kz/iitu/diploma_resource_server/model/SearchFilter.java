@@ -1,5 +1,6 @@
 package kz.iitu.diploma_resource_server.model;
 
+import kz.iitu.diploma_resource_server.model.event.Day;
 import kz.iitu.diploma_resource_server.sql.EventTable;
 
 public class SearchFilter {
@@ -14,6 +15,8 @@ public class SearchFilter {
 
     public boolean onlyMain = false;
     public boolean currentWeek = false;
+
+    public Day day = Day.ALL;
 
     public static SearchFilter onlyMain() {
         var filter = new SearchFilter();
