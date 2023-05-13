@@ -122,6 +122,8 @@ public class EventRegisterImpl implements EventRegister {
                 .applyTo(source)
                 .stream().findFirst().orElseThrow();
 
+        eventDetail.id = eventId;
+
         if (StringUtils.isNotNullOrEmpty(eventDetail.organizationId)) {
             eventDetail.organization = organizationRegister.loadOrgById(eventDetail.organizationId);
         }
