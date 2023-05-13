@@ -11,5 +11,6 @@ public class EventDetail extends Event {
     public Date endedAt;
     public String organizationId;
     public Organization organization;
+    public String ytUrl;
 
 }
