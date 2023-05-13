@@ -61,6 +61,7 @@ public class EventRegisterImpl implements EventRegister {
                 .field(EventTable.CONSTRAINTS, event.constraints)
                 .field(EventTable.IMAGE_ID, event.imageId)
                 .field(EventTable.DAY, event.day.name())
+                .field(EventTable.YT_URL, event.ytUrl)
                 .toUpdate()
                 .ifPresent(u -> u.applyTo(source));
 

@@ -18,5 +18,6 @@ public class EventToSave {
     public Date endedAt;
     public String organizationId;
     public Day day;
+    public String ytUrl;
 
 }

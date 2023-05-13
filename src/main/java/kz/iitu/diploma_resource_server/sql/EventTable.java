@@ -19,6 +19,7 @@ public class EventTable {
     public static final String LIMIT = "limit_participant";
     public static final String CURRENT = "current_participants";
     public static final String IMAGE_ID = "image_id";
+    public static final String YT_URL = "yt_url";
 
     public static final String BASE_SELECT = "SELECT " +
             ID + " as id, " +
@@ -50,6 +51,7 @@ public class EventTable {
             LIMIT + " as limit, " +
             CURRENT + " as current, " +
             IMAGE_ID + " as imageId, " +
+            YT_URL + " as ytUrl, " +
             IS_MAIN + " as isMain " +
             "FROM " + TABLE_NAME
             + " WHERE " + ID + " = ?";
