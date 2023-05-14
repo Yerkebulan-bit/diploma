@@ -37,4 +37,19 @@ public class UserTable {
             PHONE + " as phone, " +
             IMAGE_ID + " as imageId FROM diploma." + TABLE_NAME +
             " WHERE username = ?";
+
+    public static final String SELECT_EVENT_IDS_BY_USER_ID = "SELECT " +
+            "event_id as id " +
+            "FROM user_event " +
+            "WHERE user_id = ?";
+
+    public static final String SELECT_EVENT_BY_USER_ID = "SELECT " +
+            "id " +
+            "FROM user_event " +
+            "WHERE user_id = ? AND event_id = ?";
+
+    public static final String SELECT_FAVORITE_EVENT_IDS_BY_USER_ID = "SELECT " +
+            "event_id as id " +
+            "FROM favorite_event " +
+            "WHERE user_id = ?";
 }

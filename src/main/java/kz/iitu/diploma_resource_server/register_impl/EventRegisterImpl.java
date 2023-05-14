@@ -2,12 +2,10 @@ package kz.iitu.diploma_resource_server.register_impl;
 
 import kz.iitu.diploma_resource_server.model.SearchFilter;
 import kz.iitu.diploma_resource_server.model.User;
-import kz.iitu.diploma_resource_server.model.event.Day;
-import kz.iitu.diploma_resource_server.model.event.Event;
-import kz.iitu.diploma_resource_server.model.event.EventDetail;
-import kz.iitu.diploma_resource_server.model.event.EventToSave;
+import kz.iitu.diploma_resource_server.model.event.*;
 import kz.iitu.diploma_resource_server.register.EventRegister;
 import kz.iitu.diploma_resource_server.register.OrganizationRegister;
+import kz.iitu.diploma_resource_server.register.UserRegister;
 import kz.iitu.diploma_resource_server.sql.EventTable;
 import kz.iitu.diploma_resource_server.sql.SqlBuilder;
 import kz.iitu.diploma_resource_server.sql.UserTable;
@@ -17,9 +15,11 @@ import kz.iitu.diploma_resource_server.util.sql.SqlSelectTo;
 import kz.iitu.diploma_resource_server.util.sql.SqlUpsert;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,11 +28,13 @@ public class EventRegisterImpl implements EventRegister {
 
     private final DataSource source;
     private final OrganizationRegister organizationRegister;
+    private final UserRegister userRegister;
 
     @Autowired
-    public EventRegisterImpl(DataSource source, OrganizationRegister organizationRegister) {
+    public EventRegisterImpl(DataSource source, OrganizationRegister organizationRegister, @Lazy UserRegister userRegister) {
         this.source = source;
         this.organizationRegister = organizationRegister;
+        this.userRegister = userRegister;
     }
 
     @Override
@@ -116,7 +118,7 @@ public class EventRegisterImpl implements EventRegister {
 
     @Override
     @SneakyThrows
-    public EventDetail loadEventDetails(String eventId) {
+    public EventDetail loadEventDetails(String eventId, String nickname) {
         var eventDetail = SqlSelectTo.theClass(EventDetail.class)
                 .sql(EventTable.BASE_SELECT_DETAILS_BY_ID)
                 .param(eventId)
@@ -127,6 +129,18 @@ public class EventRegisterImpl implements EventRegister {
 
         if (StringUtils.isNotNullOrEmpty(eventDetail.organizationId)) {
             eventDetail.organization = organizationRegister.loadOrgById(eventDetail.organizationId);
+        }
+
+        if (StringUtils.isNotNullOrEmpty(nickname)) {
+            var user = userRegister.loadUserByNickName(nickname);
+
+            var id = SqlSelectTo.theClass(EventId.class)
+                    .sql(UserTable.SELECT_EVENT_BY_USER_ID)
+                    .params(List.of(user.id, eventId))
+                    .applyTo(source)
+                    .stream().findFirst().orElse(null);
+
+            eventDetail.isFollowed = id != null;
         }
 
         return eventDetail;
@@ -144,7 +158,38 @@ public class EventRegisterImpl implements EventRegister {
 
     @Override
     public List<Event> loadFavoriteEvents(String userId) {
-        return null;
+        var eventIds = SqlSelectTo.theClass(EventId.class)
+                .sql(UserTable.SELECT_FAVORITE_EVENT_IDS_BY_USER_ID)
+                .param(userId)
+                .applyTo(source);
+
+        return eventByIds(eventIds);
+    }
+
+    @Override
+    public List<Event> loadEventsByUser(String userId) {
+        var eventIds = SqlSelectTo.theClass(EventId.class)
+                .sql(UserTable.SELECT_EVENT_IDS_BY_USER_ID)
+                .param(userId)
+                .applyTo(source);
+
+        return eventByIds(eventIds);
+    }
+
+    private List<Event> eventByIds(List<EventId> eventIds) {
+        var eventList = new ArrayList<Event>();
+
+        for (var eventId : eventIds) {
+            eventList.add(
+                    SqlSelectTo.theClass(Event.class)
+                            .sql(EventTable.SELECT_EVENT_BY_ID)
+                            .param(eventId.id)
+                            .applyTo(source)
+                            .stream().findFirst().orElse(null)
+            );
+        }
+
+        return eventList;
     }
 
 }

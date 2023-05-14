@@ -23,10 +23,12 @@ public interface EventRegister {
 
     Event loadEventById(String eventId);
 
-    EventDetail loadEventDetails(String eventId);
+    EventDetail loadEventDetails(String eventId, String nickname);
 
     List<User> loadEventParticipants(String eventId);
 
     List<Event> loadFavoriteEvents(String userId);
+
+    List<Event> loadEventsByUser(String userId);
 
 }

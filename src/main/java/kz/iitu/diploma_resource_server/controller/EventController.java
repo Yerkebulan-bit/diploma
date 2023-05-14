@@ -7,6 +7,7 @@ import kz.iitu.diploma_resource_server.model.event.EventDetail;
 import kz.iitu.diploma_resource_server.model.event.EventToSave;
 import kz.iitu.diploma_resource_server.register.EventRegister;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,12 +50,24 @@ public class EventController {
 
     @GetMapping("/load-event-detail/{id}")
     public EventDetail loadEventDetail(@PathVariable("id") String eventId) {
-        return eventRegister.loadEventDetails(eventId);
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+
+        return eventRegister.loadEventDetails(eventId, auth.getName());
     }
 
     @GetMapping("/load-event-users")
     public List<User> loadEventUsers(@RequestParam("eventId") String eventId) {
         return eventRegister.loadEventParticipants(eventId);
+    }
+
+    @GetMapping("/load-user-events")
+    public List<Event> loadUserEvents(@RequestParam("userId") String userId) {
+        return eventRegister.loadEventsByUser(userId);
+    }
+
+    @GetMapping("/load-favorite-events")
+    public List<Event> loadFavoriteEvents(@RequestParam("userId") String userId) {
+        return eventRegister.loadFavoriteEvents(userId);
     }
 
 }
