@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Component
@@ -131,7 +132,7 @@ public class EventRegisterImpl implements EventRegister {
             eventDetail.organization = organizationRegister.loadOrgById(eventDetail.organizationId);
         }
 
-        if (StringUtils.isNotNullOrEmpty(nickname)) {
+        if (StringUtils.isNotNullOrEmpty(nickname) && !Objects.equals(nickname, "anonymousUser")) {
             var user = userRegister.loadUserByNickName(nickname);
 
             var id = SqlSelectTo.theClass(EventId.class)
