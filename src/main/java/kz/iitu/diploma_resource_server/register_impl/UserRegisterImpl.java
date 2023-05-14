@@ -143,22 +143,21 @@ public class UserRegisterImpl implements UserRegister {
     @SneakyThrows
     @Override
     public void markAsFavorite(String userId, String eventId) {
-        changeIsFavorite(userId, eventId, true);
+        SqlUpsert.into("favorite_event")
+                .key("id", UUID.randomUUID().toString())
+                .field("event_id", eventId)
+                .field("user_id", userId)
+                .toUpdate()
+                .ifPresent(u -> u.applyTo(source));
     }
 
     @Override
-    public void unmarkAsFavorite(String userId, String eventId) {
-        changeIsFavorite(userId, eventId, false);
-    }
-
     @SneakyThrows
-    private void changeIsFavorite(String userId, String eventId, boolean value) {
-        try (var connection = source.getConnection();
-             var ps = connection.prepareStatement("UPDATE diploma.user_event SET isFavorite = ? WHERE user_id = ? AND event_id = ?")) {
-
-            ps.setBoolean(1, value);
-            ps.setString(2, userId);
-            ps.setString(3, eventId);
+    public void unmarkAsFavorite(String userId, String eventId) {
+        try (var con = source.getConnection();
+             var ps = con.prepareStatement("DELETE FROM diploma.favorite_event WHERE user_id = ? AND event_id = ?")) {
+            ps.setString(1, userId);
+            ps.setString(2, eventId);
 
             ps.executeUpdate();
         }

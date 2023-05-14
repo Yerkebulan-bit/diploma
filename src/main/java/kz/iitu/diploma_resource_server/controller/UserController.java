@@ -42,4 +42,16 @@ public class UserController {
         return userRegister.register(user);
     }
 
+    @PostMapping("/mark-as-favorite")
+    public void markAsFavorite(@RequestParam("userId") String userId,
+                               @RequestParam("eventId") String eventId) {
+        userRegister.markAsFavorite(userId, eventId);
+    }
+
+    @PostMapping("/unmark-as-favorite")
+    public void unmarkAsFavorite(@RequestParam("userId") String userId,
+                                 @RequestParam("eventId") String eventId) {
+        userRegister.unmarkAsFavorite(userId, eventId);
+    }
+
 }
