@@ -49,13 +49,17 @@ public class OrganizationRegisterImpl implements OrganizationRegister {
                     .field(OrgTable.SHORT_DESCRIPTION, org.shortDescription)
                     .field(OrgTable.DESCRIPTION, org.description)
                     .field(OrgTable.IMAGE_ID, org.imageId)
+                    .field(OrgTable.PHONE, org.phone)
+                    .field(OrgTable.SITE, org.site)
+                    .field(OrgTable.USERNAME, org.username)
                     .toUpdate().ifPresent(u -> u.applyTo(dataSource));
 
             if (isCreate) {
-                SqlUpsert.into("user")
+                SqlUpsert.into("users")
                         .key("username", org.username)
                         .field("password", passwordEncoder.encode(org.password))
                         .field("enabled", true)
+                        .field("kind", "org")
                         .toUpdate()
                         .ifPresent(u -> u.applyTo(connection));
 

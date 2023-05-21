@@ -5,4 +5,5 @@ public class EventLimitReachedException extends RuntimeException {
     public EventLimitReachedException(String message) {
         super(message);
     }
+
 }

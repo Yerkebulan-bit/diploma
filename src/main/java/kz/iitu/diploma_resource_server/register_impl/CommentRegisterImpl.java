@@ -50,7 +50,6 @@ public class CommentRegisterImpl implements CommentRegister {
                 .sql(CommentTable.SELECT_COMMENTS_BY_ID)
                 .param(eventId)
                 .applyTo(source);
-
     }
 
 }

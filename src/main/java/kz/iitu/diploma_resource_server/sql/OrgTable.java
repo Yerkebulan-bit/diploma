@@ -13,7 +13,6 @@ public class OrgTable {
     public static final String IMAGE_ID = "image_id";
     public static final String USERNAME = "username";
 
-
     public static final String SELECT_ORG_BY_USERNAME = "SELECT " +
             NAME + "," +
             ID + "," +
