@@ -14,5 +14,6 @@ public class EventDetail extends Event {
     public String ytUrl;
     public boolean isFollowed;
     public int userRating;
+    public boolean canFollow;
 
 }

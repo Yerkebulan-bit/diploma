@@ -52,7 +52,8 @@ public class EventTable {
             CURRENT + " as current, " +
             IMAGE_ID + " as imageId, " +
             YT_URL + " as ytUrl, " +
-            IS_MAIN + " as isMain " +
+            IS_MAIN + " as isMain, " +
+            CURRENT + " as current " +
             "FROM " + TABLE_NAME
             + " WHERE " + ID + " = ?";
 

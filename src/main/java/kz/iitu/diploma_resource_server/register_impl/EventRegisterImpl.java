@@ -150,6 +150,7 @@ public class EventRegisterImpl implements EventRegister {
                 .stream().findFirst().orElseThrow();
 
         eventDetail.id = eventId;
+        eventDetail.canFollow = eventDetail.current < eventDetail.limit;
 
         if (StringUtils.isNotNullOrEmpty(eventDetail.organizationId)) {
             eventDetail.organization = organizationRegister.loadOrgById(eventDetail.organizationId);
