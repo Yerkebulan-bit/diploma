@@ -27,6 +27,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/event/**").permitAll()
                 .mvcMatchers("/file/**").permitAll()
+                .mvcMatchers("/feedback/**").permitAll()
                 .mvcMatchers("/user/register").permitAll()
                 .mvcMatchers("/organization/save-org").permitAll()
                 .mvcMatchers("/comment/load-event-comments").permitAll()
