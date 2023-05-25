@@ -15,6 +15,8 @@ public interface EventRegister {
 
     List<Event> loadMainEvents();
 
+    List<Event> loadSoonEvents();
+
     List<Event> loadWeekEvents();
 
     List<Event> loadEvents(SearchFilter filter, Day day);

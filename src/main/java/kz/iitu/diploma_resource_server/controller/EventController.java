@@ -33,6 +33,11 @@ public class EventController {
         return eventRegister.loadMainEvents();
     }
 
+    @GetMapping("/load-soon-events")
+    public List<Event> loadSoonEvent() {
+        return eventRegister.loadSoonEvents();
+    }
+
     @GetMapping("/load-week-events")
     public List<Event> loadWeekEvent() {
         return eventRegister.loadWeekEvents();

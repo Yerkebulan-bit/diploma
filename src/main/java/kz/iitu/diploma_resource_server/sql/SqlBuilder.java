@@ -33,6 +33,10 @@ public class SqlBuilder {
             appendCurrentWeekCondition(sql, filter);
         }
 
+        if (filter.soon) {
+            appendSoonCondition(sql);
+        }
+
         if (StringUtils.isNotNullOrEmpty(filter.sortColumn)) {
             appendSortOrder(sql, filter);
         }
@@ -68,6 +72,14 @@ public class SqlBuilder {
         sb.append(currentWeekPeriod.lastDate);
         sb.append("' ");
 
+    }
+
+    private static void appendSoonCondition(StringBuilder sb) {
+        sb.append("AND ");
+        sb.append(EventTable.STARTED_AT);
+        sb.append(" > '");
+        sb.append(LocalDate.now().plusMonths(1));
+        sb.append("' ");
     }
 
     private static PeriodRange currentWeek() {

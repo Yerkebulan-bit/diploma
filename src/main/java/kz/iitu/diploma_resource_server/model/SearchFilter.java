@@ -15,6 +15,7 @@ public class SearchFilter {
 
     public boolean onlyMain = false;
     public boolean currentWeek = false;
+    public boolean soon = false;
 
     public Day day = Day.ALL;
 
@@ -38,6 +39,18 @@ public class SearchFilter {
         filter.search = "";
         filter.sortOrder = SortOrder.ASC;
         filter.currentWeek = true;
+
+        return filter;
+    }
+
+    public static SearchFilter soon() {
+        var filter = new SearchFilter();
+
+        filter.offset = 0;
+        filter.limit = 20;
+        filter.search = "";
+        filter.sortOrder = SortOrder.ASC;
+        filter.soon = true;
 
         return filter;
     }

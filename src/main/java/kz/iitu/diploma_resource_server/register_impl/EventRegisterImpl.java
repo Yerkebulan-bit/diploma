@@ -86,6 +86,11 @@ public class EventRegisterImpl implements EventRegister {
     }
 
     @Override
+    public List<Event> loadSoonEvents() {
+        return loadEvents(SearchFilter.soon(), Day.ALL);
+    }
+
+    @Override
     public List<Event> loadWeekEvents() {
         return loadEvents(SearchFilter.currentWeak(), Day.ALL);
     }
