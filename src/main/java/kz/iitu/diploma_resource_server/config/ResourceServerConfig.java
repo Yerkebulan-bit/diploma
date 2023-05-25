@@ -28,6 +28,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .mvcMatchers("/event/**").permitAll()
                 .mvcMatchers("/file/**").permitAll()
                 .mvcMatchers("/feedback/**").permitAll()
+                .mvcMatchers("/news/**").permitAll()
                 .mvcMatchers("/user/register").permitAll()
                 .mvcMatchers("/organization/save-org").permitAll()
                 .mvcMatchers("/comment/load-event-comments").permitAll()
