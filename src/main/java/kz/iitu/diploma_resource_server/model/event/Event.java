@@ -16,5 +16,6 @@ public class Event {
     public boolean isMain;
     public int limit;
     public int current;
+    public int rating;
 
 }

@@ -70,4 +70,11 @@ public class EventController {
         return eventRegister.loadFavoriteEvents(userId);
     }
 
+    @PostMapping("/set-rating")
+    public int setRating(@RequestParam("userId") String userId,
+                         @RequestParam("eventId") String eventId,
+                         @RequestParam("rating") int rating) {
+        return eventRegister.setNewRating(userId, eventId, rating);
+    }
+
 }

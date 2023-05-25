@@ -31,4 +31,6 @@ public interface EventRegister {
 
     List<Event> loadEventsByUser(String userId);
 
+    int setNewRating(String userId, String eventId, int rating);
+
 }

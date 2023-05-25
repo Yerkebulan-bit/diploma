@@ -1,5 +1,6 @@
 package kz.iitu.diploma_resource_server.register_impl;
 
+import kz.iitu.diploma_resource_server.model.Rating;
 import kz.iitu.diploma_resource_server.model.SearchFilter;
 import kz.iitu.diploma_resource_server.model.User;
 import kz.iitu.diploma_resource_server.model.event.*;
@@ -19,6 +20,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,6 +33,12 @@ public class EventRegisterImpl implements EventRegister {
     private final DataSource source;
     private final OrganizationRegister organizationRegister;
     private final UserRegister userRegister;
+
+    private static final String AVG_COLUMN_NAME = "average";
+
+    private static final String COUNT_AVG_RATING = "SELECT AVG(rating) as " + AVG_COLUMN_NAME + " FROM event_rating WHERE event_id = ?";
+
+    private static final String USER_RATING = "SELECT rating FROM event_rating WHERE event_id = ? AND user_id = ?";
 
     @Autowired
     public EventRegisterImpl(DataSource source, OrganizationRegister organizationRegister, @Lazy UserRegister userRegister) {
@@ -86,9 +95,23 @@ public class EventRegisterImpl implements EventRegister {
     public List<Event> loadEvents(SearchFilter filter, Day day) {
         var sql = SqlBuilder.eventSelectByFilter(filter, day);
 
-        return SqlSelectTo.theClass(Event.class)
+        var events = SqlSelectTo.theClass(Event.class)
                 .sql(sql)
                 .applyTo(source);
+
+        try (var connection = source.getConnection()) {
+            for (var event : events) {
+
+                try {
+                    event.rating = countRating(connection, event.id, 1);
+                } catch (Exception e) {
+                    event.rating = 1;
+                }
+
+            }
+        }
+
+        return events;
     }
 
     @Override
@@ -142,6 +165,13 @@ public class EventRegisterImpl implements EventRegister {
                     .stream().findFirst().orElse(null);
 
             eventDetail.isFollowed = id != null;
+
+            var userRating = SqlSelectTo.theClass(Rating.class)
+                    .sql(USER_RATING)
+                    .params(List.of(eventId, user.id))
+                    .applyTo(source).stream().findFirst().orElse(null);
+
+            eventDetail.userRating = userRating == null ? 1 : userRating.rating;
         }
 
         return eventDetail;
@@ -175,6 +205,36 @@ public class EventRegisterImpl implements EventRegister {
                 .applyTo(source);
 
         return eventByIds(eventIds);
+    }
+
+    @Override
+    public int setNewRating(String userId, String eventId, int rating) {
+        try (var connection = source.getConnection()) {
+            SqlUpsert.into("event_rating")
+                    .key("user_id", userId)
+                    .key("event_id", eventId)
+                    .field("rating", rating)
+                    .toUpdate()
+                    .ifPresent(u -> u.applyTo(connection));
+
+            return countRating(connection, eventId, rating);
+        } catch (Exception e) {
+            throw new RuntimeException("flg32@fj", e);
+        }
+
+    }
+
+    @SneakyThrows
+    private int countRating(Connection connection, String eventId, int rating) {
+        try (var ps = connection.prepareStatement(COUNT_AVG_RATING)) {
+            ps.setString(1, eventId);
+
+            var rs = ps.executeQuery();
+
+            return rs.next() ? rs.getInt(AVG_COLUMN_NAME) : rating;
+        } catch (Exception e) {
+            throw new SQLException();
+        }
     }
 
     private List<Event> eventByIds(List<EventId> eventIds) {
