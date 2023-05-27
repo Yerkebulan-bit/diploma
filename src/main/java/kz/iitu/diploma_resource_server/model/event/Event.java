@@ -12,7 +12,7 @@ public class Event {
     public int runningTime;
     public String constraints;
     public String imageId;
-    public Date startedAt;
+    public String startedAt;
     public boolean isMain;
     public int limit;
     public int current;

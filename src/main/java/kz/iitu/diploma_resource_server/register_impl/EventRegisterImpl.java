@@ -49,10 +49,7 @@ public class EventRegisterImpl implements EventRegister {
 
     @Override
     public String saveEvent(EventToSave event) {
-
-        if (StringUtils.isNullOrEmpty(event.organizationId)) {
-            throw new RuntimeException("gr112dwW");
-        }
+        Objects.requireNonNull(event.organizationId);
 
         if (StringUtils.isNullOrEmpty(event.id)) {
             event.id = UUID.randomUUID().toString();
@@ -61,7 +58,7 @@ public class EventRegisterImpl implements EventRegister {
         SqlUpsert.into(EventTable.TABLE_NAME)
                 .key(EventTable.ID, event.id)
                 .field(EventTable.NAME, event.name)
-                .field(EventTable.TYPE, event.type)
+                .field(EventTable.TYPE, event.type.name())
                 .field(EventTable.DESCRIPTION, event.description)
                 .field(EventTable.LOCATION, event.location)
                 .field(EventTable.ENDED_AT, event.endedAt)
@@ -74,6 +71,7 @@ public class EventRegisterImpl implements EventRegister {
                 .field(EventTable.IMAGE_ID, event.imageId)
                 .field(EventTable.DAY, event.day.name())
                 .field(EventTable.YT_URL, event.ytUrl)
+                .field(EventTable.LIMIT, event.limit)
                 .toUpdate()
                 .ifPresent(u -> u.applyTo(source));
 
