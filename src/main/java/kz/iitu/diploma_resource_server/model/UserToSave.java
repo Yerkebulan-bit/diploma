@@ -1,7 +1,5 @@
 package kz.iitu.diploma_resource_server.model;
 
-import java.util.Date;
-
 public class UserToSave {
 
     public String name;
