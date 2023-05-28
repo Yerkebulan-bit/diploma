@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -23,6 +25,11 @@ public class UserController {
         var auth = SecurityContextHolder.getContext().getAuthentication();
 
         return userRegister.loadUserByNickName(auth.getName());
+    }
+
+    @GetMapping("/load-users")
+    public List<User> loadUsers() {
+        return userRegister.loadUsers();
     }
 
     @PostMapping("/follow-event")

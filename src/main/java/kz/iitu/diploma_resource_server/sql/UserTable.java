@@ -38,6 +38,17 @@ public class UserTable {
             IMAGE_ID + " as imageId FROM diploma." + TABLE_NAME +
             " WHERE username = ?";
 
+    public static final String SELECT_USERS = "SELECT " +
+            NAME + " as name, " +
+            ID + " as id, " +
+            SURNAME + " as surname, " +
+            BIRTH + " as birth, " +
+            EMAIL + " as email, " +
+            ABOUT + " as about, " +
+            PHONE + " as phone, " +
+            IMAGE_ID + " as imageId " +
+            "FROM diploma." + TABLE_NAME;
+
     public static final String SELECT_EVENT_IDS_BY_USER_ID = "SELECT " +
             "event_id as id " +
             "FROM user_event " +

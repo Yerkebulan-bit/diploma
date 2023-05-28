@@ -9,4 +9,12 @@ public class FeedbackTable {
     public static final String HEAR = "hear_about";
     public static final String MESSAGE = "message";
 
+    public static final String SELECT_MESSAGES = "SELECT " +
+            ID + " as id," +
+            NAME + " as name," +
+            EMAIL + " as email," +
+            HEAR + " as hearFrom," +
+            MESSAGE + " as message " +
+            "FROM " + TABLE_NAME;
+
 }

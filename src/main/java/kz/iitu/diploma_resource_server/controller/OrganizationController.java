@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/organization")
 public class OrganizationController {
@@ -28,6 +30,11 @@ public class OrganizationController {
         var context = SecurityContextHolder.getContext().getAuthentication();
 
         return organizationRegister.loadOrgByUsername(context.getName());
+    }
+
+    @GetMapping("/load-orgs")
+    public List<Organization> loadOrganizations() {
+        return organizationRegister.loadOrganizations();
     }
 
 }

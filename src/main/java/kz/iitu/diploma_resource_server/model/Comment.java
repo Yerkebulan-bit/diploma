@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Comment {
 
+    public String id;
     public String fullName;
     public String text;
     public Date date;

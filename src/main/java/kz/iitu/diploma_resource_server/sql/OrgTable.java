@@ -26,6 +26,17 @@ public class OrgTable {
             "FROM " + TABLE_NAME + " " +
             "WHERE " + USERNAME + " = ?";
 
+    public static final String SELECT_ORGS = "SELECT " +
+            NAME + "," +
+            ID + "," +
+            ADDRESS + "," +
+            EMAIL + "," +
+            SHORT_DESCRIPTION + " as shortDescription," +
+            DESCRIPTION + "," +
+            PHONE + "," +
+            SITE + "," +
+            "FROM " + TABLE_NAME;
+
     public static final String SELECT_ORG_BY_ID = "SELECT " +
             NAME + "," +
             ID + "," +

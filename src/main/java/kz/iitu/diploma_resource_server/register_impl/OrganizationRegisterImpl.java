@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -83,6 +84,13 @@ public class OrganizationRegisterImpl implements OrganizationRegister {
                 .param(username)
                 .applyTo(dataSource)
                 .stream().findFirst().orElseThrow();
+    }
+
+    @Override
+    public List<Organization> loadOrganizations() {
+        return SqlSelectTo.theClass(Organization.class)
+                .sql(OrgTable.SELECT_ORG_BY_USERNAME)
+                .applyTo(dataSource);
     }
 
     @Override

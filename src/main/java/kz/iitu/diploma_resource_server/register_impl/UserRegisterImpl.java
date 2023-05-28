@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -95,6 +96,13 @@ public class UserRegisterImpl implements UserRegister {
                 .param(nickname)
                 .applyTo(source)
                 .stream().findFirst().orElseThrow();
+    }
+
+    @Override
+    public List<User> loadUsers() {
+        return SqlSelectTo.theClass(User.class)
+                .sql(UserTable.SELECT_USERS)
+                .applyTo(source);
     }
 
     @SneakyThrows

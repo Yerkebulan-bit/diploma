@@ -3,6 +3,8 @@ package kz.iitu.diploma_resource_server.register;
 import kz.iitu.diploma_resource_server.model.User;
 import kz.iitu.diploma_resource_server.model.UserToSave;
 
+import java.util.List;
+
 public interface UserRegister {
 
     void followEvent(String userId, String eventId);
@@ -10,6 +12,8 @@ public interface UserRegister {
     void unfollowEvent(String userId, String eventId);
 
     User loadUserByNickName(String nickname);
+
+    List<User> loadUsers();
 
     String register(UserToSave user);
 
