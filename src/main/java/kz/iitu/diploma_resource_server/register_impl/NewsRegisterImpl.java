@@ -31,6 +31,17 @@ public class NewsRegisterImpl implements NewsRegister {
     }
 
     @Override
+    public News loadNewsById(String newsId) {
+        return SqlSelectTo.theClass(News.class)
+                .sql(NewsTable.SELECT_NEWS_BY_ID)
+                .param(newsId)
+                .applyTo(dataSource)
+                .stream()
+                .findFirst()
+                .orElseThrow();
+    }
+
+    @Override
     public String saveNew(News news) {
         Objects.requireNonNull(news);
 

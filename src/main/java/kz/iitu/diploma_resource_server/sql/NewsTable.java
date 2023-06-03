@@ -17,4 +17,13 @@ public class NewsTable {
             CONTENT + " as content " +
             "FROM " + TABLE_NAME;
 
+    public static final String SELECT_NEWS_BY_ID = "SELECT " +
+            ID + " as id, " +
+            CATEGORY + " as category, " +
+            TITLE + " as title, " +
+            IMAGE_ID + " as imageId, " +
+            CONTENT + " as content " +
+            "FROM " + TABLE_NAME +
+            " WHERE " + ID + " = ?";
+
 }

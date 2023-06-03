@@ -23,6 +23,11 @@ public class NewsController {
         return newsRegister.loadNews();
     }
 
+    @GetMapping("/load-new/{id}")
+    public News loadNewsById(@PathVariable("id") String newsId) {
+        return newsRegister.loadNewsById(newsId);
+    }
+
     @PostMapping("/save-news")
     public String saveNews(@RequestBody News news) {
         return newsRegister.saveNew(news);

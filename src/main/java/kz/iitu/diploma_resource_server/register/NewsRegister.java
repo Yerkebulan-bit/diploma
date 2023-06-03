@@ -8,6 +8,8 @@ public interface NewsRegister {
 
     List<News> loadNews();
 
+    News loadNewsById(String newsId);
+
     String saveNew(News news);
 
 }
