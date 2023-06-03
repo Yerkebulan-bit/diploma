@@ -4,6 +4,7 @@ import kz.iitu.diploma_resource_server.model.EventFollowResult;
 import kz.iitu.diploma_resource_server.model.User;
 import kz.iitu.diploma_resource_server.model.UserToSave;
 import kz.iitu.diploma_resource_server.model.event.Event;
+import kz.iitu.diploma_resource_server.register.AuthRegister;
 import kz.iitu.diploma_resource_server.register.EventRegister;
 import kz.iitu.diploma_resource_server.register.UserRegister;
 import kz.iitu.diploma_resource_server.sql.EventTable;
@@ -30,12 +31,14 @@ public class UserRegisterImpl implements UserRegister {
     private final DataSource source;
     private final PasswordEncoder passwordEncoder;
     private final EventRegister eventRegister;
+    private final AuthRegister authRegister;
 
     @Autowired
-    public UserRegisterImpl(DataSource source, PasswordEncoder passwordEncoder, EventRegister eventRegister) {
+    public UserRegisterImpl(DataSource source, PasswordEncoder passwordEncoder, EventRegister eventRegister, AuthRegister authRegister) {
         this.source = source;
         this.passwordEncoder = passwordEncoder;
         this.eventRegister = eventRegister;
+        this.authRegister = authRegister;
     }
 
     @Override
@@ -178,7 +181,7 @@ public class UserRegisterImpl implements UserRegister {
             SqlUpsert.into("users")
                     .key("username", user.username)
                     .field("password", passwordEncoder.encode(user.rawPassword))
-                    .field("enabled", true)
+                    .field("enabled", false)
                     .toUpdate()
                     .ifPresent(u -> u.applyTo(connection));
 
@@ -188,8 +191,7 @@ public class UserRegisterImpl implements UserRegister {
                     .toUpdate()
                     .ifPresent(u -> u.applyTo(connection));
         }
-
-        return userId;
+        return authRegister.sendVerificationCode(user.username, userId, user.email);
     }
 
     @SneakyThrows

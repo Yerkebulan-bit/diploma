@@ -6,4 +6,8 @@ public interface AuthRegister {
 
     UserType identifyUserType(String username);
 
+    String verifyCode(String codeId, String code);
+
+    String sendVerificationCode(String username, String userId, String email);
+
 }
