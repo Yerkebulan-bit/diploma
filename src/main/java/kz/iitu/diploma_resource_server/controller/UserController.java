@@ -1,5 +1,6 @@
 package kz.iitu.diploma_resource_server.controller;
 
+import kz.iitu.diploma_resource_server.model.EventFollowResult;
 import kz.iitu.diploma_resource_server.model.User;
 import kz.iitu.diploma_resource_server.model.UserToSave;
 import kz.iitu.diploma_resource_server.register.UserRegister;
@@ -33,9 +34,9 @@ public class UserController {
     }
 
     @PostMapping("/follow-event")
-    public void followEvent(@RequestParam("userId") String userId,
-                            @RequestParam("eventId") String eventId) {
-        userRegister.followEvent(userId, eventId);
+    public EventFollowResult followEvent(@RequestParam("userId") String userId,
+                                         @RequestParam("eventId") String eventId) {
+        return userRegister.followEvent(userId, eventId);
     }
 
     @PostMapping("/unfollow-event")

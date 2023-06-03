@@ -1,8 +1,9 @@
 package kz.iitu.diploma_resource_server.register_impl;
 
-import kz.iitu.diploma_resource_server.exception.EventLimitReachedException;
+import kz.iitu.diploma_resource_server.model.EventFollowResult;
 import kz.iitu.diploma_resource_server.model.User;
 import kz.iitu.diploma_resource_server.model.UserToSave;
+import kz.iitu.diploma_resource_server.model.event.Event;
 import kz.iitu.diploma_resource_server.register.EventRegister;
 import kz.iitu.diploma_resource_server.register.UserRegister;
 import kz.iitu.diploma_resource_server.sql.EventTable;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -36,7 +39,7 @@ public class UserRegisterImpl implements UserRegister {
     }
 
     @Override
-    public void followEvent(String userId, String eventId) {
+    public EventFollowResult followEvent(String userId, String eventId) {
         if (StringUtils.isNullOrEmpty(userId)) {
             throw new RuntimeException("es4dn6gdd");
         }
@@ -48,7 +51,13 @@ public class UserRegisterImpl implements UserRegister {
         var event = eventRegister.loadEventById(eventId);
 
         if (event.current >= event.limit) {
-            throw new EventLimitReachedException("fd@edos88");
+            return EventFollowResult.LIMIT_REACHED;
+        }
+
+        var user = loadUserById(userId);
+
+        if (!canParticipateByAge(user, event)) {
+            return EventFollowResult.RESTRICTED_BY_AGE;
         }
 
         SqlUpsert.into("user_event")
@@ -61,6 +70,29 @@ public class UserRegisterImpl implements UserRegister {
                 .key(EventTable.ID, eventId)
                 .field(EventTable.CURRENT, event.current++)
                 .toUpdate().ifPresent(u -> u.applyTo(source));
+
+        return EventFollowResult.OK;
+    }
+
+    public boolean canParticipateByAge(User user, Event event) {
+        var birthDateStr = user.birth;
+
+        if (StringUtils.isNullOrEmpty(birthDateStr)) {
+            return false;
+        }
+
+        var ageRestrictionStr = event.constraints;
+
+        if (StringUtils.isNullOrEmpty(ageRestrictionStr)) {
+            return true;
+        }
+
+        var birthDate = LocalDate.parse(birthDateStr);
+        var age = Period.between(birthDate, LocalDate.now()).getYears();
+
+        var ageRestriction = Integer.parseInt(ageRestrictionStr.replace("+", ""));
+
+        return age > ageRestriction;
     }
 
     @Override
@@ -96,6 +128,18 @@ public class UserRegisterImpl implements UserRegister {
                 .param(nickname)
                 .applyTo(source)
                 .stream().findFirst().orElseThrow();
+    }
+
+    private User loadUserById(String userId) {
+        Strings.requiresNotNullOrEmpty(userId);
+
+        return SqlSelectTo.theClass(User.class)
+                .sql(UserTable.SELECT_USER_BY_ID)
+                .param(userId)
+                .applyTo(source)
+                .stream()
+                .findFirst()
+                .orElseThrow();
     }
 
     @Override
