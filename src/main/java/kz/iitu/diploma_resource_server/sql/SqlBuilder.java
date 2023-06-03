@@ -26,11 +26,11 @@ public class SqlBuilder {
         appendSearch(sql, filter);
 
         if (filter.onlyMain) {
-            appendMainEventCondition(sql, filter);
+            appendMainEventCondition(sql);
         }
 
         if (filter.currentWeek) {
-            appendCurrentWeekCondition(sql, filter);
+            appendCurrentWeekCondition(sql);
         }
 
         if (filter.soon) {
@@ -44,6 +44,8 @@ public class SqlBuilder {
         if (day != null && day != Day.ALL) {
             appendSearchByDay(sql, day);
         }
+
+        appendTimeLimitation(sql);
 
         appendOffsetLimit(sql, filter);
 
@@ -59,7 +61,7 @@ public class SqlBuilder {
         sb.append("' ");
     }
 
-    private static void appendCurrentWeekCondition(StringBuilder sb, SearchFilter filter) {
+    private static void appendCurrentWeekCondition(StringBuilder sb) {
         var currentWeekPeriod = currentWeek();
 
         sb.append("AND ");
@@ -92,7 +94,7 @@ public class SqlBuilder {
         return PeriodRange.of(firstDate, lastDate);
     }
 
-    private static void appendMainEventCondition(StringBuilder sb, SearchFilter filter) {
+    private static void appendMainEventCondition(StringBuilder sb) {
         sb.append("AND ");
         sb.append(EventTable.IS_MAIN);
         sb.append(" = true ");
@@ -113,6 +115,14 @@ public class SqlBuilder {
         sb.append(filter.sortOrder);
         sb.append(" ");
 
+    }
+
+    private static void appendTimeLimitation(StringBuilder sb) {
+        sb.append(" AND ");
+        sb.append(EventTable.STARTED_AT);
+        sb.append(" >= '");
+        sb.append(LocalDate.now());
+        sb.append("' ");
     }
 
     private static void appendOffsetLimit(StringBuilder sb, SearchFilter filter) {
