@@ -10,5 +10,6 @@ public class User {
     public String about;
     public String phone;
     public String imageId;
+    public String username;
 
 }

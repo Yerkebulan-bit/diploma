@@ -228,6 +228,15 @@ public class EventRegisterImpl implements EventRegister {
 
     }
 
+    @Override
+    public void setMainValue(String eventId, boolean value) {
+        SqlUpsert.into(EventTable.TABLE_NAME)
+                .key(EventTable.ID, eventId)
+                .field(EventTable.IS_MAIN, value)
+                .toUpdate()
+                .ifPresent(u -> u.applyTo(source));
+    }
+
     @SneakyThrows
     private int countRating(Connection connection, String eventId, int rating) {
         try (var ps = connection.prepareStatement(COUNT_AVG_RATING)) {

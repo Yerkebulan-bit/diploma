@@ -18,11 +18,11 @@ public class EmailServiceReal implements EmailService {
 
     @SneakyThrows
     @Override
-    public void sendEmail(String message, String email) {
+    public void sendEmail(String message, String subject, String email) {
         SimpleMailMessage messageObject = new SimpleMailMessage();
         messageObject.setFrom("noreply@cityevent.com");
         messageObject.setTo(email);
-        messageObject.setSubject("subject");
+        messageObject.setSubject(subject);
         messageObject.setText(message);
         mailSender.send(messageObject);
     }

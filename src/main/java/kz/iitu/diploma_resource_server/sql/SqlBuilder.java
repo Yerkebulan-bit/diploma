@@ -45,7 +45,9 @@ public class SqlBuilder {
             appendSearchByDay(sql, day);
         }
 
-        appendTimeLimitation(sql);
+        if (!filter.loadOld) {
+            appendTimeLimitation(sql);
+        }
 
         appendOffsetLimit(sql, filter);
 

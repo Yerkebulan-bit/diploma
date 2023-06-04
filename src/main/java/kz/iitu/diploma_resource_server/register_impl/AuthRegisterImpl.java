@@ -12,6 +12,7 @@ import kz.iitu.diploma_resource_server.sql.CodeTable;
 import kz.iitu.diploma_resource_server.sql.OrgTable;
 import kz.iitu.diploma_resource_server.sql.UserTable;
 import kz.iitu.diploma_resource_server.util.SecurityUtil;
+import kz.iitu.diploma_resource_server.util.StringUtils;
 import kz.iitu.diploma_resource_server.util.Strings;
 import kz.iitu.diploma_resource_server.util.sql.SqlSelectTo;
 import kz.iitu.diploma_resource_server.util.sql.SqlUpsert;
@@ -108,7 +109,7 @@ public class AuthRegisterImpl implements AuthRegister {
 
         var message = "Ваш код авторизации: " + code;
 
-        emailService.sendEmail(message, email);
+        emailService.sendEmail(message, "Верификация", email);
 
         var codeId = UUID.randomUUID().toString();
 
@@ -122,6 +123,32 @@ public class AuthRegisterImpl implements AuthRegister {
                 .ifPresent(u -> u.applyTo(dataSource));
 
         return codeId;
+    }
+
+    @Override
+    public void disableUser(String username) {
+        if (StringUtils.isNullOrEmpty(username)) {
+            return;
+        }
+
+        SqlUpsert.into("users")
+                .key("username", username)
+                .field("enabled", false)
+                .toUpdate()
+                .ifPresent(u -> u.applyTo(dataSource));
+    }
+
+    @Override
+    public void enableUser(String username) {
+        if (StringUtils.isNullOrEmpty(username)) {
+            return;
+        }
+
+        SqlUpsert.into("users")
+                .key("username", username)
+                .field("enabled", true)
+                .toUpdate()
+                .ifPresent(u -> u.applyTo(dataSource));
     }
 
 }

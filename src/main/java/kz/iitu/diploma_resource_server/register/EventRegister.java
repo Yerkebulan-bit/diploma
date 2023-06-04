@@ -35,4 +35,6 @@ public interface EventRegister {
 
     int setNewRating(String userId, String eventId, int rating);
 
+    void setMainValue(String eventId, boolean value);
+
 }

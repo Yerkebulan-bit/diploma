@@ -10,4 +10,8 @@ public interface AuthRegister {
 
     String sendVerificationCode(String username, String userId, String email);
 
+    void disableUser(String username);
+
+    void enableUser(String username);
+
 }

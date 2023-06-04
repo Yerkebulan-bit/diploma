@@ -36,14 +36,12 @@ public class EmailRegisterImpl implements EmailRegister {
     }
 
     @Override
-    public void sendMassMailing(String eventId) {
-        var event = eventRegister.loadEventById(eventId);
-
+    public void sendMassMailing(String message, String subject) {
         SqlSelectTo.theClass(EmailId.class)
                 .sql("SELECT email, id FROM mailing_list")
                 .applyTo(source)
                 .forEach(
-                        email -> emailService.sendEmail("У нас новое событие: " + event.name, email.email)
+                        email -> emailService.sendEmail(message, subject, email.email)
                 );
 
     }

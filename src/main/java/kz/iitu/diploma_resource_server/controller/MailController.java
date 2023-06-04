@@ -24,8 +24,9 @@ public class MailController {
     }
 
     @PostMapping("/send-mailing")
-    public void sendMassMailing(String eventId) {
-        emailRegister.sendMassMailing(eventId);
+    public void sendMassMailing(@RequestParam("message") String message,
+                                @RequestParam("subject") String subject) {
+        emailRegister.sendMassMailing(message, subject);
     }
 
 }

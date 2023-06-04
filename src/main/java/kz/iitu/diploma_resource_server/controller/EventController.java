@@ -2,6 +2,7 @@ package kz.iitu.diploma_resource_server.controller;
 
 import kz.iitu.diploma_resource_server.model.SearchFilter;
 import kz.iitu.diploma_resource_server.model.User;
+import kz.iitu.diploma_resource_server.model.event.Day;
 import kz.iitu.diploma_resource_server.model.event.Event;
 import kz.iitu.diploma_resource_server.model.event.EventDetail;
 import kz.iitu.diploma_resource_server.model.event.EventToSave;
@@ -28,6 +29,16 @@ public class EventController {
         return eventRegister.saveEvent(event);
     }
 
+    @PostMapping("/set-as-main")
+    public void setAsMain(@RequestParam("eventId") String eventId) {
+        eventRegister.setMainValue(eventId, true);
+    }
+
+    @PostMapping("/unset-as-main")
+    public void unsetAsMain(@RequestParam("eventId") String eventId) {
+        eventRegister.setMainValue(eventId, false);
+    }
+
     @GetMapping("/load-main-event")
     public List<Event> loadMainEvent() {
         return eventRegister.loadMainEvents();
@@ -46,6 +57,11 @@ public class EventController {
     @PostMapping("/load-events")
     public List<Event> loadEvents(@RequestBody SearchFilter filter) {
         return eventRegister.loadEvents(filter, filter.day);
+    }
+
+    @GetMapping("/load-events-admin")
+    public List<Event> loadEventsAdmin() {
+        return eventRegister.loadEvents(SearchFilter.api(), Day.ALL);
     }
 
     @GetMapping("/load-events-by-org")

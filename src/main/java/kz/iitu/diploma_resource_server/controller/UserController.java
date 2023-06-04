@@ -3,6 +3,7 @@ package kz.iitu.diploma_resource_server.controller;
 import kz.iitu.diploma_resource_server.model.EventFollowResult;
 import kz.iitu.diploma_resource_server.model.User;
 import kz.iitu.diploma_resource_server.model.UserToSave;
+import kz.iitu.diploma_resource_server.register.AuthRegister;
 import kz.iitu.diploma_resource_server.register.UserRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,10 +16,12 @@ import java.util.List;
 public class UserController {
 
     private final UserRegister userRegister;
+    private final AuthRegister authRegister;
 
     @Autowired
-    public UserController(UserRegister userRegister) {
+    public UserController(UserRegister userRegister, AuthRegister authRegister) {
         this.userRegister = userRegister;
+        this.authRegister = authRegister;
     }
 
     @GetMapping("/load-user")
@@ -60,6 +63,16 @@ public class UserController {
     public void unmarkAsFavorite(@RequestParam("userId") String userId,
                                  @RequestParam("eventId") String eventId) {
         userRegister.unmarkAsFavorite(userId, eventId);
+    }
+
+    @PostMapping("/disable")
+    public void disableUser(@RequestParam("username") String username) {
+        authRegister.disableUser(username);
+    }
+
+    @PostMapping("/enable")
+    public void enableUser(@RequestParam("username") String username) {
+        authRegister.enableUser(username);
     }
 
 }

@@ -1,7 +1,5 @@
 package kz.iitu.diploma_resource_server.model.event;
 
-import java.util.Date;
-
 public class Event {
 
     public String id;
