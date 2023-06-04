@@ -6,6 +6,7 @@ import kz.iitu.diploma_resource_server.model.UserToSave;
 import kz.iitu.diploma_resource_server.model.event.Event;
 import kz.iitu.diploma_resource_server.register.AuthRegister;
 import kz.iitu.diploma_resource_server.register.EventRegister;
+import kz.iitu.diploma_resource_server.register.TicketRegister;
 import kz.iitu.diploma_resource_server.register.UserRegister;
 import kz.iitu.diploma_resource_server.sql.EventTable;
 import kz.iitu.diploma_resource_server.sql.UserTable;
@@ -32,13 +33,15 @@ public class UserRegisterImpl implements UserRegister {
     private final PasswordEncoder passwordEncoder;
     private final EventRegister eventRegister;
     private final AuthRegister authRegister;
+    private final TicketRegister ticketRegister;
 
     @Autowired
-    public UserRegisterImpl(DataSource source, PasswordEncoder passwordEncoder, EventRegister eventRegister, AuthRegister authRegister) {
+    public UserRegisterImpl(DataSource source, PasswordEncoder passwordEncoder, EventRegister eventRegister, AuthRegister authRegister, TicketRegister ticketRegister) {
         this.source = source;
         this.passwordEncoder = passwordEncoder;
         this.eventRegister = eventRegister;
         this.authRegister = authRegister;
+        this.ticketRegister = ticketRegister;
     }
 
     @Override
@@ -73,6 +76,8 @@ public class UserRegisterImpl implements UserRegister {
                 .key(EventTable.ID, eventId)
                 .field(EventTable.CURRENT, event.current++)
                 .toUpdate().ifPresent(u -> u.applyTo(source));
+
+        ticketRegister.saveTicket(userId, eventId);
 
         return EventFollowResult.OK;
     }
