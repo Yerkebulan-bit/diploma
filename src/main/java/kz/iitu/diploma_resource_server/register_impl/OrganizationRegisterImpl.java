@@ -2,6 +2,7 @@ package kz.iitu.diploma_resource_server.register_impl;
 
 import kz.iitu.diploma_resource_server.model.Organization;
 import kz.iitu.diploma_resource_server.model.OrganizationToSave;
+import kz.iitu.diploma_resource_server.register.AuthRegister;
 import kz.iitu.diploma_resource_server.register.OrganizationRegister;
 import kz.iitu.diploma_resource_server.sql.OrgTable;
 import kz.iitu.diploma_resource_server.util.StringUtils;
@@ -23,11 +24,13 @@ public class OrganizationRegisterImpl implements OrganizationRegister {
 
     private final DataSource dataSource;
     private final PasswordEncoder passwordEncoder;
+    private final AuthRegister authRegister;
 
     @Autowired
-    public OrganizationRegisterImpl(DataSource dataSource, PasswordEncoder passwordEncoder) {
+    public OrganizationRegisterImpl(DataSource dataSource, PasswordEncoder passwordEncoder, AuthRegister authRegister) {
         this.dataSource = dataSource;
         this.passwordEncoder = passwordEncoder;
+        this.authRegister = authRegister;
     }
 
     @SneakyThrows
@@ -72,7 +75,7 @@ public class OrganizationRegisterImpl implements OrganizationRegister {
             }
         }
 
-        return orgId;
+        return authRegister.sendVerificationCode(org.username, orgId, org.email);
     }
 
     @Override
