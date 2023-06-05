@@ -172,7 +172,7 @@ public class UserRegisterImpl implements UserRegister {
                     .key(UserTable.ID, userId)
                     .field(UserTable.NAME, user.name)
                     .field(UserTable.SURNAME, user.surname)
-                    .field(UserTable.BIRTH, user.birth)
+                    .field(UserTable.BIRTH, user.birth.substring(0, 10))
                     .field(UserTable.EMAIL, user.email)
                     .field(UserTable.ABOUT, user.about)
                     .field(UserTable.PHONE, user.phone)
