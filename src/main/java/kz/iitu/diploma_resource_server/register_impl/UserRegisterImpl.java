@@ -77,8 +77,6 @@ public class UserRegisterImpl implements UserRegister {
                 .field(EventTable.CURRENT, event.current++)
                 .toUpdate().ifPresent(u -> u.applyTo(source));
 
-        ticketRegister.saveTicket(userId, eventId);
-
         return EventFollowResult.OK;
     }
 
